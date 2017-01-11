@@ -1,4 +1,8 @@
-node_modules
+# files
 categories.db
 foodItems.db
 recipes.db
+
+#directories
+node_modules
+public/vendor
