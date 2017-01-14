@@ -40,9 +40,9 @@
         <!-- TODO Add binding expressions here in order to
           display information about the recipe. -->
         <h2>{{recipe.name}}</h2>
-        <p><strong>Description:</strong> <i>{{recipe.description}}</i></p>
+        <!-- <p><strong>Description:</strong> <i>{{recipe.description}}</i></p>
         <p><strong>Preparation Time:</strong> <i>{{recipe.prepTime + ' min'}}</i></p>
-        <p><strong>Cook Time:</strong> <i>{{recipe.cookTime + ' min'}}</i></p>
+        <p><strong>Cook Time:</strong> <i>{{recipe.cookTime + ' min'}}</i></p> -->
     </div>
   </a>
   <div class="hoverBlock">
@@ -52,10 +52,17 @@
           <!-- TODO Replace this anchor element's href attribute with a
             directive so that you can route the user to the Recipe Detail
             screen when they click on the 'Edit' link. -->
-          <a href="/#!/edit/{{recipe._id}}"> <img src="images/edit.svg" height="12px"> Edit </a>
+          <a href="/#!/edit/{{recipe._id}}">
+            <img src="images/edit.svg" height="12px"> Edit
+          </a>
           <!-- TODO Add a directive to this anchor element so that you can
             delete the recipe when the user clicks on the 'Delete' link. -->
-          <a class="no-action-link" ng-click="deleteRecipe($index)">
+          <a
+          confirm-deletion
+          class="no-action-link"
+          tabindex="-1"
+          recipe-index="{{$index}}"
+          recipes="recipes">
             <img src="images/delete.svg" height="12px"> Delete
           </a>
         </p>

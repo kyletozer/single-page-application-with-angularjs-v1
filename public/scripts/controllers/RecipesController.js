@@ -1,62 +1,60 @@
-(function(){
-  'use strict';
+(function() {
+	'use strict';
 
-  angular.module('app')
+	angular
+		.module('app')
+		.controller('RecipesController', [
+			'$scope',
+			'$location',
+			'dataService',
+			function($scope, $location, dataService) {
 
-  .controller('RecipesController', [
-    '$scope',
-    '$location',
-    'dataService',
-    function($scope, $location, dataService){
+				var endpoints = dataService.endpoints;
 
-      function getRecipeList(){
-        dataService.apiGet(endpoints.recipes)
-          .then(function(data){
-            $scope.recipes = data.data;
-          }
-        );
-      }
+				$scope.recipes = null;
+				$scope.activeCategory = '';
+				$scope.categories = null;
+
+        // retrieve recipes
+        dataService
+					.apiGet(endpoints.recipes)
+					.then(function(data) {
+						$scope.recipes = data.data;
+					});
+
+        // retrieve categories
+				dataService
+					.apiGet(endpoints.categories)
+					.then(function(data) {
+						$scope.categories = data.data;
+					});
+
+        // direct to add route
+				$scope.goToAddRecipePage = function() {
+					$location.path('/add');
+				};
 
 
-      var endpoints = dataService.endpoints;
+        // moved to directive
 
-      $scope.recipes = null;
-      $scope.activeCategory = '';
-      $scope.categories = null;
+				// $scope.deleteRecipe = function(index) {
+				// 	var url = endpoints.recipes + '/' + $scope.recipes[index]._id;
+        //
+				// 	dataService
+				// 		.apiDelete(url)
+				// 		.then(function(data) {
+				// 			getRecipeList();
+        //
+				// 		}, function(error) {
+				// 			console.log(error);
+				// 		});
+				// };
 
-
-      dataService.apiGet(endpoints.categories)
-        .then(function(data){
-          console.log(data.data);
-          $scope.categories = data.data;
-        }
-      );
-
-      $scope.goToAddRecipePage = function(){
-        $location.path('/add');
-      };
-
-      $scope.deleteRecipe = function(index){
         
-
-        // var url = endpoints.recipes + '/' + $scope.recipes[index]._id;
-        //
-        // dataService.apiDelete(url)
-        //   .then(function(data){
-        //     getRecipeList();
-        //
-        //   }, function(error){
-        //     console.log(error);
-        //   }
-        // );
-      };
-
-      $scope.updateRecipeList = function(value){
-        $scope.activeCategory = value;
-      };
-
-      getRecipeList();
-    }
-  ]);
+				$scope.updateRecipeList = function(value) {
+					$scope.activeCategory = value;
+				};
+			}
+		]);
 
 })();
