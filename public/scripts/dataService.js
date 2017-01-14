@@ -1,80 +1,94 @@
-angular.module('app')
+(function(){
+  'use strict';
+
+  angular.module('app')
 
 
-.service('dataService', [
-  '$http',
-  '$q',
-  function($http, $q){
+  .service('dataService', [
+    '$http',
+    '$q',
+    function($http, $q){
 
-    this.getAllRecipes = function(){
-
-      var deferred = $q.defer();
-
-      $http.get('http://localhost:5000/api/recipes')
-        .then(
-          function(data){
-            deferred.resolve(data);
-          },
-          function(error){
-            deferred.reject(error);
-          }
-        );
-
-      return deferred.promise;
-    };
+      this.endpoints = {
+        recipes: 'http://localhost:5000/api/recipes',
+        categories: 'http://localhost:5000/api/categories',
+        foodItems: 'http://localhost:5000/api/foodItems'
+      };
 
 
-    this.getRecipeById = function(id){
+      this.apiGet = function(url, id){
 
-      var deferred = $q.defer();
+        var deferred = $q.defer();
 
-      $http.get('http://localhost:5000/api/recipes/' + id)
-        .then(
-          function(data){
-            deferred.resolve(data);
-          },
-          function(error){
-            deferred.reject(error);
-          }
-        );
+        if(id){ url = url + '/' + id; }
 
-      return deferred.promise;
-    };
+        $http.get(url)
+          .then(
+            function(data){
+              deferred.resolve(data);
+            },
+            function(error){
+              deferred.reject(error);
+            }
+          );
 
-
-    this.getAllCategories = function(){
-
-      var deferred = $q.defer();
-
-      $http.get('http://localhost:5000/api/categories')
-        .then(
-          function(data){
-            deferred.resolve(data);
-          },
-          function(error){
-            deferred.reject(error);
-          }
-        );
-
-      return deferred.promise;
-    };
+        return deferred.promise;
+      };
 
 
-    this.getAllFoodItems = function(){
+      this.apiPost = function(url, body){
 
-      var deferred = $q.defer();
+        var deferred = $q.defer();
 
-      $http.get('http://localhost:5000/api/fooditems')
-        .then(
-          function(data){
-            deferred.resolve(data);
-          },
-          function(error){
-            deferred.reject(error);
-          }
-        );
+        $http.post(url, body)
+          .then(
+            function(data){
+              deferred.resolve(data);
+            },
+            function(error){
+              deferred.reject(error);
+            }
+          );
 
-      return deferred.promise;
-    };
-  }
-]);
+        return deferred.promise;
+      };
+
+
+      this.apiPut = function(url, body){
+
+        var deferred = $q.defer();
+
+        $http.put(url, body)
+          .then(
+            function(data){
+              deferred.resolve(data);
+            },
+            function(error){
+              deferred.reject(error);
+            }
+          );
+
+        return deferred.promise;
+      };
+
+
+      this.apiDelete = function(url){
+
+        var deferred = $q.defer();
+
+        $http.delete(url)
+          .then(
+            function(data){
+              deferred.resolve(data);
+            },
+            function(error){
+              deferred.reject(error);
+            }
+          );
+
+        return deferred.promise;
+      };
+    }
+  ]);
+
+})();
