@@ -29,31 +29,20 @@
 						$scope.categories = data.data;
 					});
 
-        // direct to add route
+        // direct user to add route
 				$scope.goToAddRecipePage = function() {
 					$location.path('/add');
 				};
 
-
-        // moved to directive
-
-				// $scope.deleteRecipe = function(index) {
-				// 	var url = endpoints.recipes + '/' + $scope.recipes[index]._id;
-        //
-				// 	dataService
-				// 		.apiDelete(url)
-				// 		.then(function(data) {
-				// 			getRecipeList();
-        //
-				// 		}, function(error) {
-				// 			console.log(error);
-				// 		});
-				// };
-
-        
+        // update the active category in the drop down menu
 				$scope.updateRecipeList = function(value) {
 					$scope.activeCategory = value;
 				};
+
+        // update the view when a recipe is deleted
+        $scope.$on('updateRecipes', function(event, data){
+          $scope.recipes = data;
+        });
 			}
 		]);
 

@@ -1,3 +1,6 @@
+
+// I set up this directive to fulfull the exceeds portion of the project.
+
 (function() {
   'use strict';
 
@@ -6,10 +9,13 @@
 		.directive('confirmDeletion', function() {
 
       return {
+
         restrict: 'A',
+
         scope: {
           recipes: '='
         },
+
         controller: [
           '$scope',
           'dataService',
@@ -17,10 +23,8 @@
 
             var endpoints = dataService.endpoints;
 
+            // make the call to the delete the recipe record from the database
             $scope.deleteRecipe = function(index){
-
-              console.log('recipe deleted at index ' + index);
-
               var url = endpoints.recipes + '/' + $scope.recipes[index]._id;
 
               dataService.apiDelete(url)
@@ -32,27 +36,25 @@
               );
             };
 
+
             function deleteSuccessCallback(data){
 
               dataService.apiGet(endpoints.recipes)
                 .then(function(data){
-
-                  // before recipes reassignment
-                  console.log('before deletion:', $scope.recipes);
-                  $scope.recipes = data.data;
-
-                  // updates value but does not reflect in view
-                  console.log('after deletion:', $scope.recipes);
+                  // trigger an event so that the parent controller can know when to update the view
+                  $scope.$emit('updateRecipes', data.data);
                 }
               );
             }
           }
         ],
 
+
         link: function(scope, element, attrs){
-          // console.log(scope, element, attrs);
 
           var index = Number(attrs.recipeIndex);
+
+          // keeps track of the number of times a user has clicked on the delete option, two clicks in a succession will delete the recipe
           var count = 0;
 
           element.on('focus', function(){
@@ -75,5 +77,4 @@
         }
       };
     });
-
 })();

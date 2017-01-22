@@ -1,94 +1,87 @@
-(function(){
-  'use strict';
+(function() {
+	'use strict';
 
-  angular.module('app')
+	angular
+		.module('app')
+		.service('dataService', [
+			'$http',
+			'$q',
+			function($http, $q) {
 
+        // endpoints
+				this.endpoints = {
+					recipes: 'http://localhost:5000/api/recipes',
+					categories: 'http://localhost:5000/api/categories',
+					foodItems: 'http://localhost:5000/api/foodItems'
+				};
 
-  .service('dataService', [
-    '$http',
-    '$q',
-    function($http, $q){
+        // make get request
+				this.apiGet = function(url, id) {
+					var deferred = $q.defer();
 
-      this.endpoints = {
-        recipes: 'http://localhost:5000/api/recipes',
-        categories: 'http://localhost:5000/api/categories',
-        foodItems: 'http://localhost:5000/api/foodItems'
-      };
+					if (id) {
+						url = url + '/' + id;
+					}
 
+					$http
+						.get(url)
+						.then(function(data) {
+							deferred.resolve(data);
+						}, function(error) {
+							deferred.reject(error);
+						});
 
-      this.apiGet = function(url, id){
+					return deferred.promise;
+				};
 
-        var deferred = $q.defer();
+        // make post request
+				this.apiPost = function(url, body) {
 
-        if(id){ url = url + '/' + id; }
+					var deferred = $q.defer();
 
-        $http.get(url)
-          .then(
-            function(data){
-              deferred.resolve(data);
-            },
-            function(error){
-              deferred.reject(error);
-            }
-          );
+					$http
+						.post(url, body)
+						.then(function(data) {
+							deferred.resolve(data);
+						}, function(error) {
+							deferred.reject(error);
+						});
 
-        return deferred.promise;
-      };
+					return deferred.promise;
+				};
 
+        // make put request
+				this.apiPut = function(url, body) {
 
-      this.apiPost = function(url, body){
+					var deferred = $q.defer();
 
-        var deferred = $q.defer();
+					$http
+						.put(url, body)
+						.then(function(data) {
+							deferred.resolve(data);
+						}, function(error) {
+							deferred.reject(error);
+						});
 
-        $http.post(url, body)
-          .then(
-            function(data){
-              deferred.resolve(data);
-            },
-            function(error){
-              deferred.reject(error);
-            }
-          );
+					return deferred.promise;
+				};
 
-        return deferred.promise;
-      };
+        // make delete request
+				this.apiDelete = function(url) {
 
+					var deferred = $q.defer();
 
-      this.apiPut = function(url, body){
+					$http
+						.delete(url)
+						.then(function(data) {
+							deferred.resolve(data);
+						}, function(error) {
+							deferred.reject(error);
+						});
 
-        var deferred = $q.defer();
-
-        $http.put(url, body)
-          .then(
-            function(data){
-              deferred.resolve(data);
-            },
-            function(error){
-              deferred.reject(error);
-            }
-          );
-
-        return deferred.promise;
-      };
-
-
-      this.apiDelete = function(url){
-
-        var deferred = $q.defer();
-
-        $http.delete(url)
-          .then(
-            function(data){
-              deferred.resolve(data);
-            },
-            function(error){
-              deferred.reject(error);
-            }
-          );
-
-        return deferred.promise;
-      };
-    }
-  ]);
+					return deferred.promise;
+				};
+			}
+		]);
 
 })();
